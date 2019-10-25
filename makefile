@@ -28,6 +28,7 @@ clean:
 	-rm -f $(BUILD_DIR)/*.d
 	-rm -f $(OBJS)
 	-rm -f $(BINARY)
+	-find . -name "core" -delete
 
 $(BUILD_DIR)/%.o: %.cpp
 	@echo "  Compiling $<"

@@ -5,12 +5,30 @@
  * Created on 24 octobre 2019, 14:09
  */
 #pragma once
-class Coord
+
+#include <SDL2/SDL.h>
+
+struct Coord
 {
- public:
-   Coord(float _x , float _y) : x(_x), y(_y) {}
-   
- private:
-   float x;
-   float y;
+   public:
+      using type=int;
+         
+      Coord(type _x , type _y) : x(_x), y(_y) {}
+      
+      Coord& operator +(const Coord& coord)
+      {
+         x += coord.x;
+         y += coord.y;
+         return *this;
+      }
+      
+      Coord& operator -(const Coord& coord)
+      {
+         x -= coord.x;
+         y -= coord.y;
+         return *this;
+      }
+
+      type x;
+      type y;
 };

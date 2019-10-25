@@ -8,19 +8,22 @@ using namespace std;
 class Sprite
 {
    public:
-     Sprite(const Sprite&);
-     Sprite& operator=(const Sprite&&);
-     Sprite(const Sprite&&);
-     Sprite& operator=(const Sprite&);
+      Sprite(const string& file);
+      bool render(const Coord&, SDL_Surface*) const;
+      
+      int w() const { return sprite ? sprite->w : 0; }
+      int h() const { return sprite ? sprite->h : 0; }
+            
+      Sprite(const Sprite&);
+      Sprite& operator=(const Sprite&&);
+      Sprite(const Sprite&&);
+      Sprite& operator=(const Sprite&);
       virtual ~Sprite();
      
  protected:
-      Sprite(const string& file);
 
-      void render(const Coord&) const;
-      
       friend class SpriteFlyWeightFactory;
-      
+
    private:
      SDL_Surface* sprite;
 };
