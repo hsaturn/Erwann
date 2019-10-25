@@ -20,9 +20,9 @@ int main(int argc, char** argv)
 
    cout << "Ecran correctement initialisé" << endl;
    
-   Sprite rond=Sprite("rond.bmp");
+   Sprite rond=Sprite("rond.png");
    
-   Coord position = {0,0};
+   Coord position = {250,0};
    Coord vitesse = {1,1};
    
    long i=0;
@@ -32,7 +32,20 @@ int main(int argc, char** argv)
       ecran.dessine(rond, position);
       ecran.update();
       
+      if (position.x > ecran.largeur())
+         vitesse.x = -1;
+      
+      if (position.x < 0)
+         vitesse.x = 1;
+      
+      if (position.y > ecran.hauteur())
+         vitesse.y = -1;
+      
+      if (position.y < 0)
+         vitesse.y = 1;
+      
       position = position+vitesse;
+      
       
       SDL_Delay(1);
    }

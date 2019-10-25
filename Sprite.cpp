@@ -5,12 +5,15 @@
  * Created on 24 octobre 2019, 13:43
  */
 
+#include <SDL2/SDL_image.h>
 #include "Sprite.h"
+#include "Ecran.h"
 #include "RsrcFinder.h"
 #include <iostream>
 
 using namespace std;
 
+unordered_map<string, SDL_Surface*> Sprite::surfaces;
 
 bool Sprite::render(const Coord& coord, SDL_Surface* surface) const
 {
@@ -18,7 +21,7 @@ bool Sprite::render(const Coord& coord, SDL_Surface* surface) const
    
    SDL_Rect dest = { coord.x-w()/2, coord.y-h()/2, 0, 0};
    
-   SDL_BlitSurface(sprite,NULL,surface,&dest);
+   SDL_BlitSurface(surface,NULL,surface,&dest);
    
    return true;
 }
@@ -28,13 +31,14 @@ Sprite::Sprite(const string& file)
    string resolved = RsrcFinder::findFile(file);
    if (resolved.length()==0)
    {
-      sprite = nullptr;
+      surface = nullptr;
       cerr << "Impossible de trouver le fichier [" << file << "]" << endl;
    }
    else
    {
-      sprite = SDL_LoadBMP(resolved.c_str());
-      if (sprite)
+      surface = IMG_Load(resolved.c_str());
+
+      if (surface)
       {
          cout << "Image [" << file << "] chargée" << endl;
       }
@@ -43,16 +47,48 @@ Sprite::Sprite(const string& file)
          cerr << "Impossible de charger l'image " << file << endl;
       }
    }
+   return;
+   
+   {
+   string resolved = RsrcFinder::findFile(file);
+
+   if (resolved.length()==0)
+   {
+      surface = nullptr;
+      cerr << "Impossible de trouver le fichier [" << file << "]" << endl;
+      return;
+   }
+   auto it=surfaces.find(resolved);
+   if (it != surfaces.end())
+   {
+      surface = it->second;
+      cout << "Reusing " << file << endl;
+      return;
+   }
+   
+   surface = IMG_Load(resolved.c_str());
+
+   if (surface)
+   {
+      cout << "Image [" << file << "] chargée" << endl;
+   }
+   else
+   {
+      cerr << "Impossible de charger l'image " << file << endl;
+   }
+   cout << "Surface=" << surface << endl;
+   }
+   //surfaces.try_emplace(resolved, surface);
 }
 
  Sprite::Sprite(const Sprite& s)
-   : sprite(s.sprite)
+   : surface(s.surface)
 {
 
 }
 
 Sprite::Sprite(const Sprite&& s)
-   : sprite(s.sprite)
+   : surface(s.surface)
 {
 }
 
@@ -70,23 +106,6 @@ Sprite& Sprite::operator=(const Sprite&& s)
 
 Sprite::~Sprite()
 {
-   if (sprite) SDL_FreeSurface(sprite);
-}
-
-SpriteFlyWeightFactory* SpriteFlyWeightFactory::instance()
-{
-   static SpriteFlyWeightFactory instance;
-   return &instance;
-}
-
-const Sprite& SpriteFlyWeightFactory::get(const string &bitmap)
-{
-   auto it=sprites.find(bitmap);
-   if (it != sprites.end())
-      return it->second;
-      
-   auto [iter, ins] = sprites.try_emplace(bitmap, Sprite(bitmap));
-   return iter->second;
 }
 
 

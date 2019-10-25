@@ -11,8 +11,8 @@ class Sprite
       Sprite(const string& file);
       bool render(const Coord&, SDL_Surface*) const;
       
-      int w() const { return sprite ? sprite->w : 0; }
-      int h() const { return sprite ? sprite->h : 0; }
+      int w() const { return surface ? surface->w : 0; }
+      int h() const { return surface ? surface->h : 0; }
             
       Sprite(const Sprite&);
       Sprite& operator=(const Sprite&&);
@@ -25,20 +25,7 @@ class Sprite
       friend class SpriteFlyWeightFactory;
 
    private:
-     SDL_Surface* sprite;
+     SDL_Surface* surface;
+     
+     static unordered_map<string, SDL_Surface*> surfaces;
 };
-
-class SpriteFlyWeightFactory
-{
- public:
-   static SpriteFlyWeightFactory* instance();
-   
-   const Sprite& get(const string& bitmap);
-   
- private:
-   SpriteFlyWeightFactory() = default;
-   unordered_map<string, Sprite> sprites;
-};
-
-
-

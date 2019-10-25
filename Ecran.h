@@ -38,6 +38,9 @@ class Ecran
 
       const Couleur& couleur(const string& couleur);
       const Couleur& couleur(int rouge, int vert, int bleu);
+      
+      int largeur() const { return m_surface->w; }
+      int hauteur() const { return m_surface->h; }
 
       SDL_Surface* surface() { return m_surface; }
 

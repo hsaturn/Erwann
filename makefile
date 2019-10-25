@@ -1,4 +1,4 @@
-LIBS=-lSDL2
+LIBS=-lSDL2 -lSDL2_image
 OPTS=-O0 -g -std=c++17 -Wall -MMD
 GXX=g++ $(OPTS)
 
