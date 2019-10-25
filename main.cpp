@@ -12,15 +12,11 @@ int main(int argc, char** argv)
    
    ecran.listModes();
    
-   if (!ecran.initialize(640,480))
-   {
-      cerr << "Erreur d'init écran" << endl;
-      return 1;
-   }
+   ecran.initialize(640,480);
 
    cout << "Ecran correctement initialisé" << endl;
    
-   Sprite rond=Sprite("rond.png");
+   Sprite rond = Sprite("rond.png");
    
    Coord position = {250,0};
    Coord vitesse = {1,1};

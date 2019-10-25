@@ -15,13 +15,14 @@ using namespace std;
 
 unordered_map<string, SDL_Surface*> Sprite::surfaces;
 
+
 bool Sprite::render(const Coord& coord, SDL_Surface* surface) const
 {
    if (surface == nullptr) return false;
    
    SDL_Rect dest = { coord.x-w()/2, coord.y-h()/2, 0, 0};
    
-   SDL_BlitSurface(surface,NULL,surface,&dest);
+   SDL_BlitSurface(sprite,NULL,surface,&dest);
    
    return true;
 }
@@ -31,14 +32,18 @@ Sprite::Sprite(const string& file)
    string resolved = RsrcFinder::findFile(file);
    if (resolved.length()==0)
    {
-      surface = nullptr;
+      sprite = nullptr;
       cerr << "Impossible de trouver le fichier [" << file << "]" << endl;
+      return;
    }
-   else
+   
+   auto it = surfaces.find(resolved);
+   
+   if (it == surfaces.end())
    {
-      surface = IMG_Load(resolved.c_str());
+      sprite = IMG_Load(resolved.c_str());
 
-      if (surface)
+      if (sprite)
       {
          cout << "Image [" << file << "] chargée" << endl;
       }
@@ -46,66 +51,12 @@ Sprite::Sprite(const string& file)
       {
          cerr << "Impossible de charger l'image " << file << endl;
       }
-   }
-   return;
-   
-   {
-   string resolved = RsrcFinder::findFile(file);
-
-   if (resolved.length()==0)
-   {
-      surface = nullptr;
-      cerr << "Impossible de trouver le fichier [" << file << "]" << endl;
-      return;
-   }
-   auto it=surfaces.find(resolved);
-   if (it != surfaces.end())
-   {
-      surface = it->second;
-      cout << "Reusing " << file << endl;
-      return;
-   }
-   
-   surface = IMG_Load(resolved.c_str());
-
-   if (surface)
-   {
-      cout << "Image [" << file << "] chargée" << endl;
+      surfaces[resolved] = sprite;
    }
    else
    {
-      cerr << "Impossible de charger l'image " << file << endl;
+      sprite = it->second;
+      cout << "Reusing " << resolved << endl;
    }
-   cout << "Surface=" << surface << endl;
-   }
-   //surfaces.try_emplace(resolved, surface);
 }
-
- Sprite::Sprite(const Sprite& s)
-   : surface(s.surface)
-{
-
-}
-
-Sprite::Sprite(const Sprite&& s)
-   : surface(s.surface)
-{
-}
-
-Sprite& Sprite::operator=(const Sprite& s)
-{
-   Sprite* sprite=new Sprite(s);
-   return *sprite;
-}
-
-Sprite& Sprite::operator=(const Sprite&& s)
-{
-   Sprite* sprite=new Sprite(s);
-   return *sprite;
-}
-
-Sprite::~Sprite()
-{
-}
-
 
