@@ -5,13 +5,12 @@ GXX=g++ $(OPTS)
 BUILD_DIR=build
 BINARY=erwann
 
-all: $(BINARY)
+all: build $(BINARY)
 
 -include $(BUILD_DIR)/*.d
 
 SRCE=$(wildcard *.cpp)
 OBJS=$(addprefix $(BUILD_DIR)/,$(SRCE:.cpp=.o))
-
 
 $(BINARY): $(OBJS)
 	@echo "Linking $@"
@@ -19,7 +18,7 @@ $(BINARY): $(OBJS)
 
 .PHONY: build
 build: $(BUILD_DIR)
-	mkdir -p $*(BUILD_DIR)
+	mkdir -p $(BUILD_DIR)
 
 vars:
 	echo "OBJS=$(OBJS)"
