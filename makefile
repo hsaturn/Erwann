@@ -1,4 +1,4 @@
-LIBS=-lSDL2 -lSDL2_image
+LIBS=-lSDL2 -lSDL2_image -lSDL2_mixer
 OPTS=-O0 -g -std=c++17 -Wall -MMD
 GXX=g++ $(OPTS) -Iinclude
 
