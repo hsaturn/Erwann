@@ -4,10 +4,10 @@
  * and open the template in the editor.
  */
 
-/* 
+/*
  * File:   Ecran.cpp
  * Author: hsaturn
- * 
+ *
  * Created on 25 octobre 2019, 12:06
  */
 
@@ -21,7 +21,7 @@ SDL_Surface*   Ecran::m_surface{};
 bool Ecran::mbInit(false);
 
 Ecran::Ecran()
-{   
+{
    if (mbInit == false)
    {
       mbInit = true;
@@ -115,6 +115,7 @@ void Ecran::efface(const Couleur& couleur)
 }
 
 Couleur::Couleur(int r, int v, int b)
+   : color(0)
 {
    SDL_Surface* surface(Ecran::instance().surface());
    if (surface == nullptr)
@@ -122,6 +123,6 @@ Couleur::Couleur(int r, int v, int b)
       cerr << "Impossible de choisir une couleur sans écran." << endl;
       return;
    }
-   
-   color = SDL_MapRGB(surface->format,r,v,b); 
+
+   color = SDL_MapRGB(surface->format,r,v,b);
 }

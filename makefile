@@ -1,6 +1,6 @@
 LIBS=-lSDL2 -lSDL2_image
 OPTS=-O0 -g -std=c++17 -Wall -MMD
-GXX=g++ $(OPTS)
+GXX=g++ $(OPTS) -Iinclude
 
 BUILD_DIR=build
 BINARY=erwann
@@ -9,7 +9,7 @@ all: build $(BINARY)
 
 -include $(BUILD_DIR)/*.d
 
-SRCE=$(wildcard *.cpp)
+SRCE=$(wildcard src/*.cpp) main.cpp
 OBJS=$(addprefix $(BUILD_DIR)/,$(SRCE:.cpp=.o))
 
 $(BINARY): $(OBJS)
@@ -19,6 +19,7 @@ $(BINARY): $(OBJS)
 .PHONY: build
 build: $(BUILD_DIR)
 	mkdir -p $(BUILD_DIR)
+	mkdir -p $(BUILD_DIR)/src
 
 vars:
 	echo "OBJS=$(OBJS)"
